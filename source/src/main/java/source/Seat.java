@@ -5,16 +5,26 @@ public class Seat{
     private int price;
     private int number;
     private User reservation;
+    private Flight flight
 
+
+    //constructor
+   public Seat(Flight seatFlight, int seatPrice, int seatNumber, String seatClass)
+   {
+     setFlight(seatFlight);
+     setPrice(seatPrice);
+     setNumber(seatNumber);
+     setClass(seatClass);
+   }
 
 
     // Setters and getters
     // SeatClass
-    public void setSeatClass(String seatClass) {
+    public void setClass(String seatClass) {
         seatClass = seatClass;
     }
 
-    public String getSeatClass() {
+    public String getClass() {
         return seatClass;
     }
 
@@ -43,6 +53,15 @@ public class Seat{
 
     public User getReservation() {
         return reservation;
+    }
+    
+    // Reservation
+    public void setFlight(Flight seatFlight) {
+        flight = seatFlight;
+    }
+
+    public Flight getFlight() {
+        return flight;
     }
 
 }
