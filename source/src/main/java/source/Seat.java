@@ -13,17 +13,17 @@ public class Seat{
      setFlight(seatFlight);
      setPrice(seatPrice);
      setNumber(seatNumber);
-     setFlightClass(seatClass);
+     setSeatClass(seatClass);
    }
 
 
     // Setters and getters
     // SeatClass !!DO NOT CHANGE to getClass()!! can't override objects get class method
-    public void setFlightClass(String seatClass) {
+    public void setSeatClass(String seatClass) {
         seatClass = seatClass;
     }
 
-    public String getFlightClass() {
+    public String getSeatClass() {
         return seatClass;
     }
 
