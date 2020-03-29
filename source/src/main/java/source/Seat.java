@@ -5,26 +5,25 @@ public class Seat{
     private int price;
     private int number;
     private User reservation;
-    private Flight flight
+    private Flight flight;
 
 
     //constructor
-   public Seat(Flight seatFlight, int seatPrice, int seatNumber, String seatClass)
-   {
+   public Seat(Flight seatFlight, int seatPrice, int seatNumber, String seatClass){
      setFlight(seatFlight);
      setPrice(seatPrice);
      setNumber(seatNumber);
-     setClass(seatClass);
+     setFlightClass(seatClass);
    }
 
 
     // Setters and getters
-    // SeatClass
-    public void setClass(String seatClass) {
+    // SeatClass !!DO NOT CHANGE to getClass()!! can't override objects get class method
+    public void setFlightClass(String seatClass) {
         seatClass = seatClass;
     }
 
-    public String getClass() {
+    public String getFlightClass() {
         return seatClass;
     }
 
