@@ -1,6 +1,6 @@
-package Software_development_class.source;
+package FlightBooking;
 
-public class User{
+public class User {
     private String name;
     private int id;
 

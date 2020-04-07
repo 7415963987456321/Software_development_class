@@ -1,4 +1,4 @@
-package Software_development_class.source;
+package FlightBooking;
 
 public class Seat{
     private String seatClass;
@@ -53,7 +53,7 @@ public class Seat{
     public User getReservation() {
         return reservation;
     }
-    
+
     // Reservation
     public void setFlight(Flight seatFlight) {
         flight = seatFlight;

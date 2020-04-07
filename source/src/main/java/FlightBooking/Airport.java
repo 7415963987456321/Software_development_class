@@ -1,4 +1,4 @@
-package Software_development_class.source;
+package FlightBooking;
 
 public class Airport{
     private String location;
@@ -6,7 +6,6 @@ public class Airport{
 
 
     // Setters and getters
-
     // Location
     public void setLocation(String airportLocation) {
         location = airportLocation;

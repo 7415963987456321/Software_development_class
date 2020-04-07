@@ -1,4 +1,4 @@
-package Software_development_class.source;
+package FlightBooking;
 
 public class Company{
     private String name;
