@@ -1,6 +1,6 @@
-package FlightBooking;
+package Test;
 
-import  FlightBooking.*;
+import FlightBooking.*;
 import org.junit.*;
 
 
