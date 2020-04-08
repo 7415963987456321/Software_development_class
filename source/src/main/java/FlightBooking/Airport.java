@@ -2,7 +2,7 @@ package FlightBooking;
 
 public class Airport{
     private String location;
-    private String accessability;
+    private String accessibility;
 
 
     // Setters and getters
@@ -15,13 +15,13 @@ public class Airport{
         return location;
     }
 
-    // Accessability
-    public void setAccessability(String airPortAccessabilty) {
-        accessability = airPortAccessabilty;
+    // accessibility
+    public void setAccessibility(String airPortAccessabilty) {
+        accessibility = airPortAccessabilty;
     }
 
-    public String getAccessability() {
-        return accessability;
+    public String getAccessibility() {
+        return accessibility;
     }
 
 }

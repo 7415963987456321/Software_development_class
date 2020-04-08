@@ -1,10 +1,11 @@
 package FlightBooking;
+import java.util.*;
 
 public class Flight{
     private Airport start;
     private Airport end;
-    private int takeoff;
-    private int landing;
+    private Date takeoff;
+    private Date landing;
     private int number;
     private String type;
     private Company company;
@@ -19,7 +20,7 @@ public class Flight{
     }
 
     public Airport getStart() {
-        return end;
+        return start;
     }
 
     // End
@@ -32,20 +33,21 @@ public class Flight{
     }
 
     // Takeoff
-    public void setTakeOff(int flightTakeOff) {
+    public void setTakeOff(Date flightTakeOff) {
         takeoff = flightTakeOff;
     }
 
-    public int getTakeOff() {
+    // Returns a date object
+    public Date getTakeOff() {
         return takeoff;
     }
 
     // Landing
-    public void setLanding(int flightLanding) {
+    public void setLanding(Date flightLanding) {
         landing = flightLanding;
     }
 
-    public int getLanding() {
+    public Date getLanding() {
         return landing;
     }
 

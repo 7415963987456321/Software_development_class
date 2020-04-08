@@ -8,8 +8,8 @@ public class Seat{
     private Flight flight;
 
 
-    //constructor
-   public Seat(Flight seatFlight, int seatPrice, int seatNumber, String seatClass){
+    // Constructor
+    public Seat(Flight seatFlight, int seatPrice, int seatNumber, String seatClass){
      setFlight(seatFlight);
      setPrice(seatPrice);
      setNumber(seatNumber);
@@ -62,5 +62,4 @@ public class Seat{
     public Flight getFlight() {
         return flight;
     }
-
 }
