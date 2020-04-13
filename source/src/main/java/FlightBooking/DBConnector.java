@@ -20,17 +20,14 @@ public class DBConnector implements Database{
             conn = DriverManager.getConnection("jdbc:sqlite:src/main/resources/database.db");
             stmt = conn.createStatement();
 
-            getSeats();
-            getFlightList("LY389");
+            // For testing remove later:
+            // getSeats();
+            // getFlightList("LY389");
+            // System.out.println("Search test: " + flightList.size());
 
         } catch(SQLException e) {
             System.out.println("Error in DBConnector");
             System.err.println(e.getMessage());
-        }finally {
-            try { if (rs    != null) rs.close();    } catch (Exception e) {};
-            try { if (stmt  != null) stmt.close();  } catch (Exception e) {};
-            try { if (pstmt != null) pstmt.close(); } catch (Exception e) {};
-            try { if (conn  != null) conn.close();  } catch (Exception e) {};
         }
     }
 
@@ -43,7 +40,7 @@ public class DBConnector implements Database{
             ResultSet rs = pstmt.executeQuery();
 
         } catch(SQLException e) {
-            System.out.println("Error in getting Flight");
+            System.out.println("Error in reserve");
             System.err.println(e.getMessage());
         }
         return seat;
@@ -51,9 +48,13 @@ public class DBConnector implements Database{
 
     public Object[] search(String[] arguments){
         // Search by flightname for now.
-        List<Flight> results = getFlightList(arguments[0]);
+        // What are the search results supposed to look like?
+        String test = arguments[0];
+        List<Flight> results = getFlightList(test);
 
-        System.out.println("Search results: " + results);
+        System.out.println("Search arguments: " + arguments[0]);
+        System.out.println("Search results: " + flightList.size());
+
         return new Object[10];
     }
 
@@ -107,7 +108,6 @@ public class DBConnector implements Database{
             pstmt.setString(1, flightNumber);
 
             ResultSet rs = pstmt.executeQuery();
-            // rs.get
             while(rs.next()) {
                 Flight newFlight = new Flight();
 
@@ -120,7 +120,6 @@ public class DBConnector implements Database{
                 newFlight.setAmenities(rs.getString("amenities"));
 
                 flightList.add(newFlight);
-
             }
         } catch(SQLException e) {
             System.out.println("Error in getting Flightlist");
@@ -151,7 +150,7 @@ public class DBConnector implements Database{
                 seatPrice       = rs.getInt("price");
                 seatReservation = rs.getString("reservation");
 
-                // Seat newSeat = new Seat(seatNumber, );
+                Seat newSeat = new Seat();
 
                 // Seat = (Flight seatFlight, int seatPrice, int seatNumber, String seatClass)
                 // seatTable[seatTableIndex] = new Seat(getFlight("LY389"), seatPrice, seatNumber,flightClass);
@@ -160,6 +159,13 @@ public class DBConnector implements Database{
         } catch(SQLException e) {
             System.out.println("Error in getting Seats");
             System.err.println(e.getMessage());
+        } 
+        // Where the fuck is this supposed to go?
+        finally {
+            try { if (rs    != null) rs.close();    } catch (Exception e) {};
+            try { if (stmt  != null) stmt.close();  } catch (Exception e) {};
+            try { if (pstmt != null) pstmt.close(); } catch (Exception e) {};
+            try { if (conn  != null) conn.close();  } catch (Exception e) {};
         }
     }
 }
