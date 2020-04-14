@@ -8,9 +8,17 @@ public class FlightControllerTest {
     public User user1;
     public Flight flight1;
     public Seat  seat1;
+    public DBConnector db;
 
     @Before
     public void setUp(){
+        try {
+            db = new DBConnector();
+        } catch(SQLException e) {
+            System.out.println("Error in Flight test");
+            System.err.println(e.getMessage());
+        }
+        
         User user1 = new User();
         user1.setName("tester");
         user1.setId(10);
@@ -31,8 +39,8 @@ public class FlightControllerTest {
 
     @Test
     public void testReservation(){
-        // FlightController testController = new FlightController();
-        // testController.reserve(user1, flight1, seat1);
-        // assertEquals(user1, seat1.getReservation());
+        FlightController testController = new FlightController(db);
+        //testController.reserve(user1, flight1, seat1);
+        //assertEquals(user1, seat1.getReservation());
     }
 }
