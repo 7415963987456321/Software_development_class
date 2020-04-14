@@ -6,7 +6,7 @@ public class Flight{
     private Airport end;
     private Date takeoff;
     private Date landing;
-    private int number;
+    private String number;
     private String type;
     private Company company;
     private String amenities;
@@ -61,11 +61,11 @@ public class Flight{
     }
 
     // Number
-    public void setNumber(int flightNumber) {
+    public void setNumber(String flightNumber) {
         number = flightNumber;
     }
 
-    public int getNumber() {
+    public String getNumber() {
         return number;
     }
 

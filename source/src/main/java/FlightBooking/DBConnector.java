@@ -150,7 +150,7 @@ public class DBConnector implements Database{
                 seatPrice       = rs.getInt("price");
                 seatReservation = rs.getString("reservation");
 
-                Seat newSeat = new Seat();
+                //Seat newSeat = new Seat();
 
                 // Seat = (Flight seatFlight, int seatPrice, int seatNumber, String seatClass)
                 // seatTable[seatTableIndex] = new Seat(getFlight("LY389"), seatPrice, seatNumber,flightClass);
