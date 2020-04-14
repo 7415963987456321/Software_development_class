@@ -45,7 +45,7 @@ public class DatabaseTest {
         // Also need to figure out what the search result is supposed to look like.
 
         String[] arguments = {
-            "VA57", "LA396"
+             "LY389"
         };
 
         control.search(arguments);
