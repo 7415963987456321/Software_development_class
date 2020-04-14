@@ -31,7 +31,6 @@ public class DBConnector implements Database{
         }
     }
 
-
     public Seat reserve(User user, Seat seat, String flightNumber ){
         try {
             pstmt = conn.prepareStatement("SELECT * FROM Seat WHERE flightnumber = ? AND reservation='NULL' ");
@@ -56,6 +55,64 @@ public class DBConnector implements Database{
         System.out.println("Search results: " + flightList.size());
 
         return new Object[10];
+    }
+
+    public static void deleteUser(int userid){
+        try {
+            // Delete user by userId:
+            pstmt = conn.prepareStatement("DELETE FROM Customer WHERE userid=?");
+            pstmt.setInt(1, userid);
+            pstmt.executeUpdate();
+
+            pstmt.close();
+
+        } catch(SQLException e) {
+            System.out.println("Error in deleting user");
+            System.err.println(e.getMessage());
+        }
+    }
+
+    // Returns true if new user successfully created, otherwise false.
+    public static Boolean createNewUser(int userid, String username){
+        User newUser = new User();
+        try {
+            // First check if the user exists:
+            pstmt = conn.prepareStatement("SELECT * FROM Customer WHERE userid=?");
+            pstmt.setInt(1, userid);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                System.out.println("User already exists!");
+                return false;
+            }
+
+            pstmt = conn.prepareStatement("INSERT INTO Customer VALUES(?,?)");
+            pstmt.setString(1, username);
+            pstmt.setInt(2, userid);
+            pstmt.executeUpdate();
+
+        } catch(SQLException e) {
+            System.out.println("Error in creating user");
+            System.err.println(e.getMessage());
+        }
+            return true;
+    }
+
+    public static User getUser(int userId) {
+        User newUser = new User();
+        try {
+            pstmt = conn.prepareStatement("SELECT * FROM Customer WHERE userid=?");
+            pstmt.setInt(1, userId);
+            ResultSet rs = pstmt.executeQuery();
+
+            newUser.setName(rs.getString("username"));
+            newUser.setId(rs.getInt("userid"));
+
+        } catch(SQLException e) {
+            System.out.println("Error in getting Customer");
+            System.err.println(e.getMessage());
+        }
+        return newUser;
     }
 
     private Company getCompany(String companyName){

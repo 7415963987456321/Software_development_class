@@ -25,17 +25,17 @@ public class DatabaseTest {
         user1.setId(10);
 
         Flight flight1 = new Flight();
-        flight1.setNumber(50);
+        // flight1.setNumber(50);
 
         Seat seat1 = new Seat(flight1, 1,2,"Business");
-        seat1.setNumber(100);
+        // seat1.setNumber(100);
     }
 
     @After
     public void tearDown(){
-        user1=null;
-        flight1 =null;
-        seat1 = null;
+        user1   = null;
+        flight1 = null;
+        seat1   = null;
         control = null;
     }
 
@@ -50,5 +50,29 @@ public class DatabaseTest {
 
         control.search(arguments);
         // control.reserve(user1, seat1, flight1.getNumber());
+
+        // Test users:
+        System.out.println("Attempt to get existing user:");
+        user1 = control.getUser(0);
+        System.out.println("Username: " + user1.getName());
+        System.out.println("UserId: " + user1.getId());
+
+        // Try to create new user that already exists:
+        System.out.println("Attempt to create existing user:");
+        Boolean tryExistingUser = control.createNewUser(0, "Arttu");
+        System.out.println("Existing user : " + tryExistingUser);
+
+        // Try to create new user that doesn't exist:
+        System.out.println("Attempt to create new user:");
+        Boolean tryNewUser = control.createNewUser(42, "Test");
+        if(tryNewUser) System.out.println("New user created sucessfully: " + tryNewUser);
+
+        // Try to delete the test user:
+        // System.out.println("Attempt to delete the testuser:");
+        // control.deleteUser(42);
+        // User deletedUser = control.getUser(42);
+        // System.out.println("Username: " + user1.getName());
+
+
     }
 }
