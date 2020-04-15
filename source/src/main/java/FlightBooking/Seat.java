@@ -3,13 +3,13 @@ package FlightBooking;
 public class Seat{
     private String seatClass;
     private int price;
-    private int number;
+    private String number;
     private User reservation;
     private Flight flight;
 
 
     // Constructor
-    public Seat(Flight seatFlight, int seatPrice, int seatNumber, String seatClass){
+    public Seat(Flight seatFlight, int seatPrice, String seatNumber, String seatClass){
      setFlight(seatFlight);
      setPrice(seatPrice);
      setNumber(seatNumber);
@@ -37,11 +37,11 @@ public class Seat{
     }
 
     // Number
-    public void setNumber(int seatNumber) {
+    public void setNumber(String seatNumber) {
         number = seatNumber;
     }
 
-    public int getNumber() {
+    public String getNumber() {
         return number;
     }
 

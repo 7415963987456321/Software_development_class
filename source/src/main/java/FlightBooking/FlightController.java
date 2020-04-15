@@ -1,4 +1,5 @@
 package FlightBooking;
+import java.util.*;
 
 public class FlightController {
      private Database database;
@@ -9,6 +10,8 @@ public class FlightController {
     }
 
     public Seat reserve(User user, Flight flight, Seat seat) throws NullPointerException {
+         
+         System.out.println("in controller");
          Seat reserved;
          reserved = database.reserve(user, seat, flight.getNumber());
 
@@ -22,8 +25,16 @@ public class FlightController {
              return reserved;
          }
      }
-     /*public Object[] search(String[][]){
-
-       }*/
+     public List<Flight> flightSearch(String[] arguments)
+     {
+       
+       return database.searchFlight(arguments[1], arguments[0]);
+        
+     }
+       
+     public List<Seat> searchSeat(Flight flight)
+     {
+       return database.searchSeat(flight);
+     }
  }
 

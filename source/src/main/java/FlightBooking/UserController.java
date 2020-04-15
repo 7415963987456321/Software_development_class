@@ -6,4 +6,9 @@ public class UserController {
    public UserController(Database controllerDatabase){
          database = controllerDatabase;
    }
+   
+   public User login(int userid)
+   {
+     return database.getUser(userid);
+   }
 }

@@ -10,6 +10,7 @@ public class DBConnector implements Database{
     List<Seat>   seatList;
     List<Flight> resultList;
     List<Seat> resultListSeat;
+    
 
     // SQL variables
     static Connection        conn;
@@ -19,17 +20,21 @@ public class DBConnector implements Database{
 
     public DBConnector() throws SQLException {
         // Connect to SQL database:
-        try {
+        /*try {
             // Load the sqlite-JDBC driver using the current class loader
             conn = DriverManager.getConnection("jdbc:sqlite:src/main/resources/database.db");
-            stmt = conn.createStatement();
-
+            stmt = conn.createStatement();*/
+        try {
+         Class.forName("org.sqlite.JDBC");
+         conn = DriverManager.getConnection("jdbc:sqlite:database.db");
+         stmt = conn.createStatement();
+        
             // For testing remove later:
             // getSeats();
             // getFlightList("LY389");
             // System.out.println("Search test: " + flightList.size());
 
-        } catch(SQLException e) {
+        } catch(Exception e) {
             System.out.println("Error in DBConnector");
             System.err.println(e.getMessage());
         }
@@ -45,10 +50,17 @@ public class DBConnector implements Database{
 
     public Seat reserve(User user, Seat seat, String flightNumber ){
         try {
-            pstmt = conn.prepareStatement("SELECT * FROM Seat WHERE flightnumber = ? AND reservation='NULL' ");
-            pstmt.setString(1, flightNumber);
+            pstmt = conn.prepareStatement("UPDATE Seat SET reservation = ? WHERE flightnumber = ? AND seatnumber= ?");
+            pstmt.setString(1, user.getName());
             pstmt.setString(2, flightNumber);
-            ResultSet rs = pstmt.executeQuery();
+            pstmt.setString(3, seat.getNumber());
+            int effected = pstmt.executeUpdate();
+            
+            if(effected==1)
+            {
+              System.out.println("effect in database");
+              seat.setReservation(user);
+            }
 
         } catch(SQLException e) {
             System.out.println("Error in reserve");
@@ -57,7 +69,7 @@ public class DBConnector implements Database{
         return seat;
     }
 
-    public List<Flight> searchFlight(String origin, String destination, Date takeoff){
+    public List<Flight> searchFlight(String origin, String destination){
         // A list of Flights:
         resultList = new ArrayList<Flight>();
 
@@ -95,19 +107,19 @@ public class DBConnector implements Database{
         resultListSeat = new ArrayList<Seat>();
 
             int seatTableIndex = 0;
-            String  flightNumber, flightClass, seatReservation;
-            int seatPrice, seatNumber;
+            String  flightNumber, flightClass, seatReservation, seatNumber;
+            int seatPrice;
 
         try {
-            pstmt = conn.prepareStatement("SELECT * FROM Seat WHERE flightnumber=?");
+            pstmt = conn.prepareStatement("SELECT * FROM Seat WHERE flightnumber=? AND reservation = 'None'");
             pstmt.setString(1, flight.getNumber());
 
             ResultSet rs = pstmt.executeQuery();
             while(rs.next()) {
                 // For debugging, remove later
-                System.out.println("Seatnumber = " + rs.getString("seatnumber"));
+                //System.out.println("Seatnumber = " + rs.getString("seatnumber"));
 
-                seatNumber      = rs.getInt("seatnumber");
+                seatNumber      = rs.getString("seatnumber");
                 flightNumber    = rs.getString("flightnumber");
                 flightClass     = rs.getString("class");
                 seatPrice       = rs.getInt("price");
@@ -139,7 +151,7 @@ public class DBConnector implements Database{
         return new Object[10];
     }
 
-    public static void deleteUser(int userid){
+    public void deleteUser(int userid){
         try {
             // Delete user by userId:
             pstmt = conn.prepareStatement("DELETE FROM Customer WHERE userid=?");
@@ -155,7 +167,7 @@ public class DBConnector implements Database{
     }
 
     // Returns true if new user successfully created, otherwise false.
-    public static Boolean createNewUser(int userid, String username){
+    public Boolean createNewUser(int userid, String username){
         User newUser = new User();
         try {
             // First check if the user exists:
@@ -180,7 +192,7 @@ public class DBConnector implements Database{
             return true;
     }
 
-    public static User getUser(int userId) {
+    public User getUser(int userId) {
         User newUser = new User();
         try {
             pstmt = conn.prepareStatement("SELECT * FROM Customer WHERE userid=?");
@@ -221,7 +233,7 @@ public class DBConnector implements Database{
         Airport newAirport = new Airport();
 
         try {
-            pstmt = conn.prepareStatement("SELECT * FROM Airport WHERE airportname=?");
+            pstmt = conn.prepareStatement("SELECT * FROM Airport WHERE country=?");
             pstmt.setString(1, Airportname);
             ResultSet rs = pstmt.executeQuery();
 
@@ -279,8 +291,6 @@ public class DBConnector implements Database{
 
             while(rs.next()) {
                 // For debugging, remove later
-
-                System.out.println("Seatnumber = " + rs.getString("seatnumber"));
 
                 seatNumber      = rs.getInt("seatnumber");
                 flightNumber    = rs.getString("flightnumber");
