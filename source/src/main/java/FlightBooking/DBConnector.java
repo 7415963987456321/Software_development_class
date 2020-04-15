@@ -1,11 +1,14 @@
 package FlightBooking;
 import java.sql.*;
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
+
 
 public class DBConnector implements Database{
     // Use a list instead of array
     List<Flight> flightList;
     List<Seat>   seatList;
+    List<Flight> resultList;
 
     // SQL variables
     static Connection        conn;
@@ -31,6 +34,14 @@ public class DBConnector implements Database{
         }
     }
 
+    public static void cleanup () {
+        try { if (rs    != null) rs.close();    } catch (Exception e) {};
+        try { if (stmt  != null) stmt.close();  } catch (Exception e) {};
+        try { if (pstmt != null) pstmt.close(); } catch (Exception e) {};
+        try { if (conn  != null) conn.close();  } catch (Exception e) {};
+    }
+
+
     public Seat reserve(User user, Seat seat, String flightNumber ){
         try {
             pstmt = conn.prepareStatement("SELECT * FROM Seat WHERE flightnumber = ? AND reservation='NULL' ");
@@ -44,6 +55,52 @@ public class DBConnector implements Database{
         }
         return seat;
     }
+
+    public List<Flight> searchFlight(String origin, String destination, Date takeoff){
+        // A list of Flights:
+        resultList = new ArrayList<Flight>();
+
+        try {
+            pstmt = conn.prepareStatement("SELECT * FROM Flight WHERE origin=? AND dest=?");
+            pstmt.setString(1, origin);
+            pstmt.setString(2, destination);
+
+            ResultSet rs = pstmt.executeQuery();
+            while(rs.next()) {
+                Flight newFlight = new Flight();
+
+
+                newFlight.setNumber(rs.getString("number"));
+                newFlight.setTakeOff(rs.getDate("takeoff"));
+                newFlight.setLanding(rs.getDate("landing"));
+                newFlight.setStart(getAirport(rs.getString("origin")));
+                newFlight.setEnd(getAirport(rs.getString("dest")));
+                newFlight.setType(rs.getString("aircraft"));
+                newFlight.setCompany(getCompany(rs.getString("compname")));
+                newFlight.setAmenities(rs.getString("amenities"));
+
+                resultList.add(newFlight);
+            }
+
+        } catch(SQLException e) {
+            System.out.println("Error in searchFlight");
+            System.err.println(e.getMessage());
+        }
+        return resultList;
+    }
+
+     // public List<String> searchSeat(Flight flight){
+     //     Seat check = new Seat();
+     //     resultList = new ArrayList<Seat>();
+     //     for (int i = 0; i < seatList.size();  ){
+     //         check = flightList.get(i);
+     //         if (check.getStart().getLocation() == origin
+     //         && check.getEnd().getLocation()    == destination ){
+     //             resultList.add(check);
+     //         }
+     //     }
+     //     return resultList;
+     // }
 
     public Object[] search(String[] arguments){
         // Search by flightname for now.
@@ -127,7 +184,7 @@ public class DBConnector implements Database{
 
 
         } catch(SQLException e) {
-            System.out.println("Error in getting Flight");
+            System.out.println("Error in getting Company");
             System.err.println(e.getMessage());
         }
         return newCompany;
@@ -146,9 +203,8 @@ public class DBConnector implements Database{
             newAirport.setLocation(rs.getString("airportname"));
             newAirport.setAccessibility(rs.getString("airportname"));
 
-
         } catch(SQLException e) {
-            System.out.println("Error in getting Flight");
+            System.out.println("Error in getting Airport");
             System.err.println(e.getMessage());
         }
         return newAirport;
@@ -217,12 +273,5 @@ public class DBConnector implements Database{
             System.out.println("Error in getting Seats");
             System.err.println(e.getMessage());
         } 
-        // Where the fuck is this supposed to go?
-        finally {
-            try { if (rs    != null) rs.close();    } catch (Exception e) {};
-            try { if (stmt  != null) stmt.close();  } catch (Exception e) {};
-            try { if (pstmt != null) pstmt.close(); } catch (Exception e) {};
-            try { if (conn  != null) conn.close();  } catch (Exception e) {};
-        }
     }
 }

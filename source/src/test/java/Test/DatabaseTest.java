@@ -3,13 +3,15 @@ package Test;
 import FlightBooking.*;
 import org.junit.*;
 import java.sql.*;
-
+import java.util.List;
+import java.util.ArrayList;
 
 public class DatabaseTest {
     public DBConnector control;
     public User user1;
     public Flight flight1;
     public Seat  seat1;
+    List<Flight> resultList;
 
     @Before
     public void setUp(){
@@ -44,11 +46,11 @@ public class DatabaseTest {
         // Need to update this
         // Also need to figure out what the search result is supposed to look like.
 
-        String[] arguments = {
-             "MM502"
-        };
+        // String[] arguments = {
+        //      "MM502"
+        // };
 
-        control.search(arguments);
+        // control.search(arguments);
         // control.reserve(user1, seat1, flight1.getNumber());
 
         // Test users:
@@ -68,11 +70,30 @@ public class DatabaseTest {
         if(tryNewUser) System.out.println("New user created sucessfully: " + tryNewUser);
 
         // Try to delete the test user:
-        // System.out.println("Attempt to delete the testuser:");
-        // control.deleteUser(42);
-        // User deletedUser = control.getUser(42);
-        // System.out.println("Username: " + user1.getName());
+        System.out.println("Attempt to delete the testuser:");
+        control.deleteUser(42);
+        User deletedUser = control.getUser(42);
+        System.out.println("Username: " + user1.getName());
 
+        // Test the search function:
+        System.out.println("Attempt to get a list of flights:");
 
+        long time = System.currentTimeMillis(); // need to fix this
+        Date currentTime = new Date(time);
+        Flight check = new Flight();
+
+        resultList = new ArrayList<Flight>();
+        resultList = control.searchFlight("Germany", "Greece", currentTime);
+
+        System.out.println("Number of flights found :" + resultList.size() );
+        for (int i = 0; i < resultList.size(); i++){
+            check = resultList.get(i);
+            // Airport returns null for some reason, likely some issue in how
+            // the airports are arranged
+            System.out.println("origin" + check.getStart().getLocation());
+            System.out.println("Flightnumber: " + check.getNumber());
+            System.out.println("Takeoff" + check.getTakeOff());
+            System.out.println("Landing" + check.getLanding());
+        }
     }
 }
