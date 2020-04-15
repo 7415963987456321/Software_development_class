@@ -9,6 +9,7 @@ public class DBConnector implements Database{
     List<Flight> flightList;
     List<Seat>   seatList;
     List<Flight> resultList;
+    List<Seat> resultListSeat;
 
     // SQL variables
     static Connection        conn;
@@ -89,18 +90,42 @@ public class DBConnector implements Database{
         return resultList;
     }
 
-     // public List<String> searchSeat(Flight flight){
-     //     Seat check = new Seat();
-     //     resultList = new ArrayList<Seat>();
-     //     for (int i = 0; i < seatList.size();  ){
-     //         check = flightList.get(i);
-     //         if (check.getStart().getLocation() == origin
-     //         && check.getEnd().getLocation()    == destination ){
-     //             resultList.add(check);
-     //         }
-     //     }
-     //     return resultList;
-     // }
+     public List<Seat> searchSeat(Flight flight){
+        // A list of seats:
+        resultListSeat = new ArrayList<Seat>();
+
+            int seatTableIndex = 0;
+            String  flightNumber, flightClass, seatReservation;
+            int seatPrice, seatNumber;
+
+        try {
+            pstmt = conn.prepareStatement("SELECT * FROM Seat WHERE flightnumber=?");
+            pstmt.setString(1, flight.getNumber());
+
+            ResultSet rs = pstmt.executeQuery();
+            while(rs.next()) {
+                // For debugging, remove later
+                System.out.println("Seatnumber = " + rs.getString("seatnumber"));
+
+                seatNumber      = rs.getInt("seatnumber");
+                flightNumber    = rs.getString("flightnumber");
+                flightClass     = rs.getString("class");
+                seatPrice       = rs.getInt("price");
+                seatReservation = rs.getString("reservation");
+
+                Seat newSeat = new Seat(flight, seatPrice, seatNumber, flightClass);
+                newSeat.setReservation(null);
+
+                resultListSeat.add(newSeat);
+            }
+
+        } catch(SQLException e) {
+            System.out.println("Error in searchFlight");
+            System.err.println(e.getMessage());
+        }
+        return resultListSeat;
+
+     }
 
     public Object[] search(String[] arguments){
         // Search by flightname for now.
